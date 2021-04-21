@@ -1,21 +1,30 @@
-#!/bin/python
-# -*- coding:utf-8 -*-
-__name__ = 'urlinfo'
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+URL 配置管理模块
+
+提供各接口 URL 的访问方法。
+"""
+
+import config
 
 
-appointment_url = r'http://lerentang.yihecm.com/?m=save'
-search_url = r'http://lerentang.yihecm.com/?m=resultchaxun'
-pic_url = r'http://lerentang.yihecm.com/core/common/yzm.php?0.29450912268882457'
-form_url = r'http://lerentang.yihecm.com/?m=yuyuelist&id=1'
+def get_appointment_url() -> str:
+    """获取预约提交 URL"""
+    return config.APPOINTMENT_URL
 
-def get_appointmenturl():
-    return appointment_url
 
-def get_searchurl():
-    return search_url
+def get_search_url() -> str:
+    """获取预约结果查询 URL"""
+    return config.SEARCH_URL
 
-def get_picurl():
-    return pic_url
 
-def get_formurl():
-    return form_url
+def get_captcha_url() -> str:
+    """获取验证码图片 URL"""
+    return config.CAPTCHA_URL
+
+
+def get_form_url() -> str:
+    """获取预约表单页面 URL"""
+    return config.FORM_URL

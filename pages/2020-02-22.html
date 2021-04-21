@@ -1,0 +1,392 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1,user-scalable=no">
+    <meta id="viewPorts" name="viewport" content="width=640,target-densitydpi=640,user-scalable=on">
+
+
+    <script>
+        var appVersion = window.navigator.appVersion;
+        var platform = '', viewPorts = '';
+        if (appVersion.toLowerCase().indexOf('android')) {
+            platform = 'android';
+        } else if (appVersion.indexOf('iPhone') || appVersion.indexOf('iPod') || appVersion.indexOf('iPad')) {
+            platform = 'ios';
+        }
+        var winWidth = window.screen.width,
+            targetDensitydpi = winWidth / 640;
+        switch (platform) {
+            case 'android':
+                var devicePixelRatio = window.devicePixelRatio;
+                targetDensitydpi = 640 / winWidth * devicePixelRatio * 160;
+                viewPorts = 'width=640,target-densitydpi=' + targetDensitydpi + ',user-scalable=on';
+                break;
+            case 'ios':
+                viewPorts = 'width=640,initial-scale=' + targetDensitydpi + ',mininum-scale=' + targetDensitydpi + ',maxinum-scale=' + targetDensitydpi + ',user-scalable=no';
+                break;
+        }
+        if (viewPorts) {
+            document.getElementById('viewPorts').setAttribute('content', viewPorts);
+        }
+    </script>
+
+    <title>乐仁堂口罩预约</title>
+    <link type="text/css" rel="stylesheet" href="/application/mobile/asset/css/base.css" />
+    <link type="text/css" rel="stylesheet" href="/application/mobile/asset/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/application/mobile/asset/css/listyle.css" />
+
+    <script type="text/javascript" src="/application/mobile/asset/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/application/mobile/asset/js/common.js"></script>
+    <link rel="icon" href="data:;base64,=">
+
+</head>
+
+
+
+<script src="/application/mobile/asset/js/jquery.qrcode.min.js"></script>
+
+<script>
+    var area = 
+            [
+                { "ID": "1", "title": "长安区" }, 
+                { "ID": "3", "title": "新华区" }, 
+                { "ID": "15", "title": "桥西区" }, 
+                { "ID": "16", "title": "裕华区" }, 
+                { "ID": "18", "title": "正定" }, 
+                { "ID": "19", "title": "平山区" }, 
+                { "ID": "20", "title": "高新区" }
+            ];
+    var shop = 
+            [
+                { "ID": "9", "shoptitle": "益民店", "address": "长安区建设北大街2号燕华大厦一层", "phone": "0311-89185219", "yuyuelimit": "800", "area": "1", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "10", "shoptitle": "桃园店（汇君城）", "address": "石家庄市新华区石清路88号汇君城F区28号楼102号商铺", "phone": "0311-85275027", "yuyuelimit": "250", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "11", "shoptitle": "中华北店", "address": "石家庄市新华区联盟路5号万邦大厦青年城1-60、1-61商业门脸", "phone": "87713145/87710674", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "12", "shoptitle": "翟营店", "address": "长安区中山东路658号汇瑞商贸广场一层商业门脸", "phone": "67961653/85057521", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "14", "shoptitle": "乐仁堂建设北店", "address": "长安区建设北大街194号铺0-107、0-108号", "phone": "66691322/86041080", "yuyuelimit": "800", "area": "1", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "15", "shoptitle": "乐仁堂健民药房（金圆大厦）", "address": "中华北大街金圆大厦3号", "phone": "67597301", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "16", "shoptitle": "乐仁堂瑞康店", "address": "长安区北宋路金山街交口东行100米路南", "phone": "66160096", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "18", "shoptitle": "红旗店", "address": "红旗大街与新石北路交叉口北行100米路东", "phone": "83804245", "yuyuelimit": "800", "area": "15", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "19", "shoptitle": "乐仁堂新药店", "address": "东岗路与翟营大街交口西南角春天广场", "phone": "031185810765", "yuyuelimit": "500", "area": "16", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "20", "shoptitle": "乐仁堂市庄店（五里庄园）", "address": "桥西区友谊南大街与汇锦路交叉口西行50米路北 五里庄园底商", "phone": "18503293656", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "21", "shoptitle": "乐仁堂和平店", "address": "长安区和平东路122号（和平路与长征街交口）", "phone": "86082807", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "22", "shoptitle": "乐仁堂金马店", "address": "和平路与泰华街交叉口东北角", "phone": "67265119", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "23", "shoptitle": "康宁店", "address": "中山西路121号", "phone": "87022252", "yuyuelimit": "1500", "area": "15", "yuyuelimit2": "200", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "24", "shoptitle": "乐仁堂仁和", "address": "广安大街谈南路6", "phone": "89610277", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "25", "shoptitle": "乐仁堂合作路店", "address": "合作路113-17（十三所西）", "phone": "031187046180", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "26", "shoptitle": "乐仁堂总店", "address": "长安区青园街57号", "phone": "0311-86052160", "yuyuelimit": "1500", "area": "1", "yuyuelimit2": "200", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "27", "shoptitle": "正定一店", "address": "正定县正定镇府西街52号综合楼一层", "phone": "0311-88018385", "yuyuelimit": "400", "area": "18", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "30", "shoptitle": "华脉店", "address": "裕华区槐中路116号华脉新村6A-8号", "phone": "86013021", "yuyuelimit": "500", "area": "16", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "31", "shoptitle": "花园店", "address": "裕华区世纪花园东区75号", "phone": "89916537", "yuyuelimit": "500", "area": "16", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "32", "shoptitle": "北道岔店", "address": "石家庄市新华区北新街116号瀚海商务楼7号1层商业门脸", "phone": "86930424", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "33", "shoptitle": "和平东店（剑桥春雨）", "address": "石家庄市裕华区体育大街方北路58号剑桥春雨15号楼-4商业门脸", "phone": "85956223", "yuyuelimit": "500", "area": "16", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "34", "shoptitle": "益福店", "address": "省二院对面建设银行西邻", "phone": "87817971", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "35", "shoptitle": "阳光店（友谊大街）", "address": "桥西区友谊北大街35号一层转角位", "phone": "67668210", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "36", "shoptitle": "槐中店（缔景城）", "address": "桥西区工农路255号缔景大道1001号商铺", "phone": "66690501", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "37", "shoptitle": "仓安店", "address": "桥西区卓达玫瑰园门口东侧（槐安西路88号）", "phone": "83050114", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "38", "shoptitle": "新槐底店", "address": "石家庄市桥西区中华南大街355号", "phone": "82622086", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "40", "shoptitle": "蓝天店", "address": "长安区中山东路458号", "phone": "85075914", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "41", "shoptitle": "正大店", "address": "长安区胜利北街338号一层33号门脸", "phone": "89910090", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "42", "shoptitle": "长安店", "address": "长安区丰收路48号北城国际F2、F3号商铺", "phone": "18503293670", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "43", "shoptitle": "新明珠店（省杂技团）", "address": "长安区建华南大街99号院一层门脸", "phone": "83071031", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "44", "shoptitle": "范西店", "address": "长安区市人民医院对面（范西路19号）", "phone": "86696695", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "45", "shoptitle": "胜利店", "address": "裕华区燕岗怡园A座1-3号商业", "phone": "85818117", "yuyuelimit": "500", "area": "16", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "46", "shoptitle": "同安店", "address": "新华区联盟路585号一层商铺", "phone": "87084868/87814920", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "47", "shoptitle": "永兴店", "address": "省二院对面全聚德西行30米", "phone": "87826041", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "48", "shoptitle": "健康店（阳光大厦）", "address": "桥西区平安南大街35号副1号", "phone": "86035369", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "49", "shoptitle": "怀安店", "address": "桥西区红旗大街98号", "phone": "67306590", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "50", "shoptitle": "新光店", "address": "石家庄市桥西区中山西路 847号1层4号", "phone": "66105037", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "51", "shoptitle": "盛康店", "address": "长安区谈固南大街15号", "phone": "85066643/85664242", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "52", "shoptitle": "机场路店", "address": "新华区和平西路435号", "phone": "87045060/87043719", "yuyuelimit": "800", "area": "3", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "53", "shoptitle": "新华店", "address": "新华区水源街173号", "phone": "67302377/67302378", "yuyuelimit": "800", "area": "3", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "54", "shoptitle": "人民店", "address": "新华区省二院对面（和平西路100号）", "phone": "87040958", "yuyuelimit": "800", "area": "3", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "55", "shoptitle": "北郡店", "address": "高新区东高新湘江大道36号", "phone": "67590979", "yuyuelimit": "800", "area": "20", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "56", "shoptitle": "大兴店", "address": "河北省石家庄市长安区中山东路95号", "phone": "66160065", "yuyuelimit": "800", "area": "1", "yuyuelimit2": "100", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "57", "shoptitle": "嘉和广场店", "address": "长安区中山路与谈固大街交叉口嘉和广场底商", "phone": "0311_86965931", "yuyuelimit": "400", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "58", "shoptitle": "保利店", "address": "长安区荣达街与石纺路交叉口西南角", "phone": "66515036", "yuyuelimit": "500", "area": "1", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "59", "shoptitle": "海普店", "address": "新华区赵佗路赵二街小区南门", "phone": "66631236", "yuyuelimit": "500", "area": "3", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "60", "shoptitle": "师范", "address": "桥西区工农路455号西清公寓怡禾风景小区1-0-104", "phone": "66161969", "yuyuelimit": "500", "area": "15", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }, 
+                { "ID": "61", "shoptitle": "正定三店", "address": "石家庄市正定县正定镇恒州北街90-5号（正定协和医院急诊）", "phone": "83509759", "yuyuelimit": "250", "area": "18", "yuyuelimit2": "0", "yuyuelimit3": "0", "yuyuecount": "0" }
+            ];
+    var picktime = ["09:00-11:00", "11:00-13:00", "13:00-15:00", "15:00-17:00", "17:00-19:00"];
+    var quhuodate = '02月23日';
+    var maxlimit = 1;
+    var yuyuetime = ["19:30", "23:59"];
+    var loading = 0;
+    var bei = 1;
+    var token = 'mym82g0xour8vqm5gk0hpzwrf2xpb6kmuwkl5g9g4pgo5rgb2ihg84xculqvhz81';
+    var pid = 1;//商品ID
+
+    $(document).ready(function () {
+        picklen = picktime.length;
+        for (x = 0; x < picklen; x++) {
+            $('#picktime').append('<option value="' + picktime[x] + '"  class="masseget" >' + quhuodate + picktime[x] + '</option>');
+        }
+
+        if (pid == 1) {
+            bei = 5;//口罩每包5个
+        }
+
+        for (x = 1; x <= maxlimit; x++) {
+            $('#shuliang').append('<option value="' + (bei * x) + '"  class="masseget" >' + (bei * x) + '</option>');
+        }
+
+
+    });
+
+    function setshop(id) {
+        console.log("区域ID" + id);
+        $('#shop').empty();
+        if (id == '0') {
+            $('#shop').append('<option value="0"  class="masseget" >请先选择取货区域</option>');
+            return false;
+        }
+        $('#shop').append('<option value="0"  class="masseget" >请选择取货门店</option>');
+        len = shop.length;
+        for (i = 0; i < len; i++) {
+            if (shop[i].area == id) {
+                $('#shop').append('<option   value="' + shop[i].ID + '"  class="masseget" >' + shop[i].shoptitle + '</option>');
+            }
+        }
+    }
+
+    function yue() {
+        if (loading == 1) {
+            alert('正在提交处理,请勿重复提交');
+            return false;
+        }
+
+        realname = $('#realname').val().trim();
+        phone = $('#phone').val().trim();
+        shenfenzheng = $('#shenfenzheng').val().trim();
+        area = $('#area').val().trim();
+        shop = $('#shop').val().trim();
+        pickdate = $('#pickdate').val().trim();
+        picktime = $('#picktime').val().trim();
+        shuliang = $('#shuliang').val().trim();
+        yzm = $('#yzm').val().trim();
+
+        if (realname == '') {
+            alert('请输入姓名');
+            return false;
+        }
+
+        if (phone == '') {
+            alert('请输入电话');
+            return false;
+        }
+
+        if (shenfenzheng == '') {
+            alert('请输入身份证');
+            return false;
+        }
+
+        if (area == 0) {
+            alert('请选择取货区域');
+            return false;
+        }
+
+        if (shop == 0) {
+            alert('请选择取货门店');
+            return false;
+        }
+
+        if (shuliang == 0) {
+            alert('请选择购买数量');
+            return false;
+        }
+
+        if (picktime == '') {
+            alert('请选择取货时间');
+            return false;
+        }
+
+        if (pickdate == '') {
+            alert('请选择取货日期');
+            return false;
+        }
+
+        if (yzm == '') {
+            alert('请输入验证码');
+            return false;
+        }
+
+        data = { "realname": realname, "phone": phone, "shenfenzheng": shenfenzheng, "area": area, "shop": shop, "pickdate": pickdate, "picktime": picktime, "shuliang": shuliang, "pid": pid, "yzm": yzm, "token": token };
+        loading = 1;//
+
+
+        $.ajax({
+            url: "/?m=save",
+            type: 'post',
+            data: data,
+            success: function (data) {
+                data = JSON.parse(data);
+
+                if (data[0] == 1) {
+                    console.log(data[1]);
+                    myid = data[1];
+                    shijian = data[2];
+                    mi = data[3];
+                    picktime = $("#picktime option:selected").html();
+                    pickshop = data[4];
+                    $('#ryuyueid').html(myid);
+                    $('#rpicktime').html(picktime);
+                    $('#rpickshop').html(pickshop);
+                    $('#yuyueshijian').html(shijian);
+
+                    //生成二维码
+                    loc = location.href;
+                    loc = loc.split("?");
+                    loc = loc[0];
+
+                    url = loc + "?m=check&id=" + myid + "&mi=" + mi;
+                    console.log(url);
+                    $("#ewm").qrcode({ width: 400, height: 400, text: url });
+                    //生成二维码完毕
+                    $('#code').css('display', "");
+
+                }
+                else {
+                    alert(data[1]);
+                }
+                loading = 0;//重置提交状态为0
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('抱歉，提交失败，请重新提交');
+                loading = 0;//重置提交状态为0
+            }
+        });
+
+    }
+
+
+</script>
+
+
+<body>
+    <div class="cont">
+
+        <header>
+            <div class="logo"><img src="/application/mobile/asset/images/logo.jpg" /></div>
+            <nav class="gh"><a></a></nav>
+        </header>
+        <div class="mobile-nav">
+            <ul>
+                <li><a href="/">首页</a></li>
+                <li><a href="/?m=yuyue">口罩预约购买</a></li>
+                <li><a href="/?m=dizhi">门店地址查询</a></li>
+                <li><a href="/?m=shuoming">口罩供货说明</a></li>
+            </ul>
+        </div>
+
+        <div class="top-nav-lists">
+
+        </div>
+
+        <div class="waper-business waper-business2" style="position:relative;">
+            <div class="waper-tit">口罩预约申请表</div>
+            <div class="waper-cont1 waper-cont2">
+
+
+                <div class="massege-list clearfix">
+                    <div class="massege-info clearfix">
+                        <input type="text" id="realname" maxlength="5" class="masseget" placeholder="姓名" value="">
+                    </div>
+                    <div class="massege-info clearfix">
+                        <input type="text" id="phone" class="masseget" maxlength="11" placeholder="电话" value="">
+                    </div>
+
+
+                    <div class="massege-info clearfix">
+                        <input type="text" id="shenfenzheng" maxlength="18" class="masseget" placeholder="身份证号"
+                            value="">
+                    </div>
+
+
+                    <div class="massege-info clearfix">
+                        <select id="shuliang" class="masseget">
+                            <option value="0" class="masseget">选择购买数量</option>
+                        </select>
+                    </div>
+
+                    <div class="massege-info clearfix">
+                        <select name="select" id="area" class="masseget" onChange="setshop(this.value)">
+                            <option value="0" class="masseget">请选择取货区域</option>
+                            <option value="1">长安区</option>
+                            <option value="3">新华区</option>
+                            <option value="15">桥西区</option>
+                            <option value="16">裕华区</option>
+                            <option value="18">正定</option>
+                            <option value="19">平山区</option>
+                            <option value="20">高新区</option>
+
+                        </select>
+                    </div>
+
+                    <div class="massege-info clearfix">
+                        <select name="select" id="shop" class="masseget">
+                            <option value="0" class="masseget">请先选择取货区域</option>
+                        </select>
+                    </div>
+
+
+                    <div class="massege-info clearfix">
+                        <select name="select" id="picktime" class="masseget">
+                            <option value="" class="masseget">请选择取货时间</option>
+                        </select>
+
+                        <input type="hidden" id="pickdate" name="pickdate" value="2020-02-23">
+
+                    </div>
+
+                    <div class="massege-info clearfix" style="position:relative;">
+                        <input type="text" id="yzm" class="masseget" style="width:260px;" maxlength="4"
+                            placeholder="验证码,提交后失效,点击刷新">
+                        <img src="core/common/yzm.php" height="84"
+                            onClick="this.src='core/common/yzm.php?'+Math.random();"
+                            style="position:absolute;left:270px;" />
+                    </div>
+
+                    <div class="subinput"><input type="button" value="确定预约购买[预约时段19:30-23:59]" onClick="yue();"
+                            id="btn_jon"></div>
+                </div>
+
+
+
+
+
+            </div>
+
+
+            <div id="code"
+                style="position:absolute;left:0px;top:0px; background-color:#CCCCCC;width:100%;height:100%;display:none;padding-top:20px;">
+                <div class="waper-mit2" style="margin-bottom:30px;">
+                    <strong>预约成功</strong>
+                </div>
+                <div id="ewm" style="text-align:center;"></div>
+                <div style="text-align:center;margin-top:20px;font-size:1.5em; padding:20px;">
+                    您的预约ID为<br><br><span style='font-size:2.5em;color:#FF0000;' id="ryuyueid"></span><br><br>
+                    预约时间:<span id="yuyueshijian"></span><br><br>
+                    <span id="wuzi" style='font-size:2.5em;color:#FF0000;'>口罩</span><br><br>
+                    请您在 <span id="rpicktime"></span>到乐仁堂<font color=red id='rpickshop'></font>领取
+                    <br><br><span style="font-size:2.5em;color:red;">请截屏保存二维码，领取时出示给店员确认身份</span>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+        <footer>
+            <p>国药乐仁堂主办</p>
+            <p><small>益和传媒&九赢互动提供技术支持</small></p>
+        </footer>
+        <script type="text/javascript" src="https://s4.cnzz.com/z_stat.php?id=1278603447&web_id=1278603447"></script>
+
+
+    </div>
+</body>
+
+</html>
